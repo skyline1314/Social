@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main"
+    tools:context="com.skyline.social.activity.FlashActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="社区运动"
+        android:textColor="#ffffffff"
+        android:textSize="36dp"
+        android:textStyle="bold" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="10dp">
+
+        <com.skyline.social.custom.RadarViewGroup
+            android:id="@+id/radar_viewgroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <com.skyline.social.custom.RadarView
+                android:id="@+id/radar_view"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerInParent="true"></com.skyline.social.custom.RadarView>
+
+        </com.skyline.social.custom.RadarViewGroup>
+
+        <com.skyline.social.custom.CircleAvatar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/default_avtar" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="copyright © 2016-2019"
+        android:textColor="#ffffff"
+        android:textSize="12dp" />
+
+
+</RelativeLayout>
