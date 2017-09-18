@@ -9,7 +9,7 @@ import android.os.PersistableBundle;
  */
 public abstract class BaseActivity extends Activity {
 
-    private Activity mActivity;
+    public static Activity mActivity;
 
 
     @Override
@@ -22,7 +22,8 @@ public abstract class BaseActivity extends Activity {
 
     @Override
     protected void onResume() {
-        doResume();
         super.onResume();
+        doResume();
+        mActivity = this;
     }
 }

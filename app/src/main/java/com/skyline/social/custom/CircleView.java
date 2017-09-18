@@ -19,7 +19,7 @@ import com.skyline.social.util.DisplayUtils;
 public class CircleView extends View {
     private Paint mPaint;
     private Bitmap mBitmap;
-    private float radius = DisplayUtils.dp2px(getContext(),9);//半径
+    private float radius = DisplayUtils.dp2px(9);//半径
     private float disX;//位置X
     private float disY;//位置Y
     private float angle;//旋转的角度
@@ -89,7 +89,7 @@ public class CircleView extends View {
         if (specMode == MeasureSpec.EXACTLY) {
             result = specSize;
         } else {
-            result = DisplayUtils.dp2px(getContext(),18);
+            result = DisplayUtils.dp2px(18);
             if (specMode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, specSize);
             }

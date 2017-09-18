@@ -109,7 +109,7 @@ public class RadarViewGroup extends ViewGroup implements RadarView.IScanningList
         if (specMode == MeasureSpec.EXACTLY) {
             result = specSize;
         } else {
-            result = DisplayUtils.dp2px(getContext(),300);
+            result = DisplayUtils.dp2px(300);
             if (specMode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, specSize);
             }
