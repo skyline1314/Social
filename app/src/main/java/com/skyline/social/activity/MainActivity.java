@@ -1,5 +1,6 @@
 package com.skyline.social.activity;
 
+import android.app.ActivityOptions;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.skyline.social.R;
 import com.skyline.social.base.BaseActivity;
 import com.skyline.social.custom.CircleAvatar;
 import com.skyline.social.entity.ActivityEntity;
+import com.skyline.social.util.ActivityJump;
 import com.skyline.social.util.DisplayUtils;
 import com.skyline.social.util.GlobalFunction;
 
@@ -83,8 +85,8 @@ public class MainActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            ActivityEntity item = data.get(position);
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            final ActivityEntity item = data.get(position);
             GlobalFunction.display(mActivity, item.getUrl(), holder.img);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.item_root.getLayoutParams();
             if (position == 0) {
@@ -103,6 +105,13 @@ public class MainActivity extends BaseActivity {
 
             holder.time.setText(item.getTime());
             holder.title.setText(item.getTitle());
+            holder.item_root.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle= ActivityOptions.makeSceneTransitionAnimation(mActivity,holder.img,"img").toBundle();
+                    ActivityJump.startDetailActivity(mActivity,bundle,item);
+                }
+            });
         }
 
 

@@ -3,6 +3,9 @@ package com.skyline.social.base;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.view.KeyEvent;
+
+import com.skyline.social.activity.FlashActivity;
 
 /**
  * Created by Administrator on 2017/9/15.
@@ -26,4 +29,16 @@ public abstract class BaseActivity extends Activity {
         doResume();
         mActivity = this;
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

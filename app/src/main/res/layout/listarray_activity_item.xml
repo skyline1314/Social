@@ -21,13 +21,14 @@
             android:id="@+id/img"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitXY" />
 
         <LinearLayout
             android:id="@+id/info_root"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/shape_title_bg"
             android:gravity="center_vertical">
 
