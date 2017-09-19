@@ -54,18 +54,30 @@ public class DetailActivity extends BaseActivity {
         fav_btn = (ImageView) findViewById(R.id.fav_btn);
         line_root = (LinearLayout) findViewById(R.id.line_root);
 
-        title_text.setText(data.getTitle());
+        title_text.setText("活动详情");
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                finishAfterTransition();
             }
         });
         GlobalFunction.display(mActivity, data.getUrl(), img);
+        initChildView();
     }
 
-    @Override
-    public void finish() {
-       finishAfterTransition();
+    private void initChildView() {
+        line_root.removeAllViews();
+        for (int i = 0; i <9; i++) {
+            View view = getLayoutInflater().inflate(R.layout.listarray_info_item, null);
+            TextView header_text = view.findViewById(R.id.header_text);
+            TextView content_text = view.findViewById(R.id.content_text);
+            View divider = view.findViewById(R.id.divider);
+            if (i == 3) {
+                divider.setVisibility(View.GONE);
+            } else {
+                divider.setVisibility(View.VISIBLE);
+            }
+            line_root.addView(view);
+        }
     }
 }

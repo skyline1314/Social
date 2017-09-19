@@ -9,4 +9,8 @@
     <color name="bg_color_blue_light">#84B5CA</color>
     <color name="yellow_f9">#f9c528</color>
     <color name="main">#eecc60</color>
+    <color name="main_bg">#eeeeee</color>
+    <color name="white_999">#999999</color>
+    <color name="white_666">#666666</color>
+    <color name="white_333">#333333</color>
 </resources>

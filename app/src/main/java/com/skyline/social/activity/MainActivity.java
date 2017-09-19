@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -108,8 +109,14 @@ public class MainActivity extends BaseActivity {
             holder.item_root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle= ActivityOptions.makeSceneTransitionAnimation(mActivity,holder.img,"img").toBundle();
-                    ActivityJump.startDetailActivity(mActivity,bundle,item);
+
+//                    Pair<ImageView, String> img = Pair.create(holder.img, "img");
+//                    Pair<LinearLayout, String> title = Pair.create(holder.info_root, "title");
+//                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(mActivity, img,title).toBundle();
+
+//
+                    Bundle bundle= ActivityOptions.makeSceneTransitionAnimation(mActivity,holder.img, "img").toBundle();
+                    ActivityJump.startDetailActivity(mActivity, bundle, item);
                 }
             });
         }
@@ -122,6 +129,7 @@ public class MainActivity extends BaseActivity {
 
 
         class ViewHolder extends RecyclerView.ViewHolder {
+            LinearLayout info_root;
             RelativeLayout item_root;
             ImageView img;
             TextView title;
@@ -133,6 +141,7 @@ public class MainActivity extends BaseActivity {
                 title = itemView.findViewById(R.id.title);
                 time = itemView.findViewById(R.id.time);
                 item_root = itemView.findViewById(R.id.item_root);
+                info_root = itemView.findViewById(R.id.info_root);
             }
         }
     }

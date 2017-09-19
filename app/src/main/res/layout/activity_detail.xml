@@ -28,27 +28,54 @@
 
                 <ImageView
                     android:id="@+id/img"
-                    android:scaleType="fitXY"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
+                    android:scaleType="fitXY"
                     android:transitionName="img" />
 
                 <ImageView
                     android:id="@+id/fav_btn"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignBottom="@+id/img"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="30dp"
                     android:layout_marginRight="20dp"
                     android:src="@mipmap/fav_normal" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="#803D3D3D"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="12dp"
+                    android:transitionName="title"
+                    android:paddingRight="12dp"
+                    android:paddingTop="4dp"
+                    android:text="军安卫士打乒乓球"
+                    android:textColor="#ffffff" />
+
             </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/line_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@drawable/shape_activity_bg"
                 android:orientation="vertical"></LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="张艺兴创建于2017-9-18"
+                android:textColor="@color/white_666"
+                android:textSize="12dp" />
+
         </LinearLayout>
     </ScrollView>
 
