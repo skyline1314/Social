@@ -2,6 +2,9 @@ package com.skyline.social.activity;
 
 import android.app.ActivityOptions;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +15,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.skyline.social.R;
 import com.skyline.social.base.BaseActivity;
 import com.skyline.social.custom.CircleAvatar;
+import com.skyline.social.custom.swiperecyclerview.SwipeRecyclerView;
 import com.skyline.social.entity.ActivityEntity;
 import com.skyline.social.util.ActivityJump;
 import com.skyline.social.util.DisplayUtils;
@@ -29,13 +34,15 @@ public class MainActivity extends BaseActivity {
     private CircleAvatar avatar;
     private TextView title;
     private RelativeLayout title_bar;
-    private RecyclerView list_view;
+    //    private RecyclerView list_view;
+//    private SwipeRefreshLayout swipe_view;
     private MainActivity.activityAdapter socialAdapter;
     private ArrayList<ActivityEntity> data = new ArrayList<>();
     private int[] resIds = {R.mipmap.p1, R.mipmap.p1_1, R.mipmap.p1_2, R.mipmap.p1_3, R.mipmap.p2, R.mipmap.p2_1, R.mipmap.p2_2, R.mipmap.p2_3, R.mipmap.p3, R.mipmap.p4};
     private static int MARGIN = DisplayUtils.dp2px(12);
     private static int MARGIN_TOP = DisplayUtils.dp2px(7);
     private static int MARGIN_BOTTOM = DisplayUtils.dp2px(5);
+    private SwipeRecyclerView list_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +60,53 @@ public class MainActivity extends BaseActivity {
         avatar = (CircleAvatar) findViewById(R.id.avatar);
         title = (TextView) findViewById(R.id.title);
         title_bar = (RelativeLayout) findViewById(R.id.title_bar);
-        list_view = (RecyclerView) findViewById(R.id.list_view);
-        list_view.setLayoutManager(new LinearLayoutManager(mActivity));
-        list_view.setItemAnimator(new DefaultItemAnimator());
+
+        list_view = (SwipeRecyclerView) findViewById(R.id.swipe_recycler_view);
+        list_view.getSwipeRefreshLayout().setProgressBackgroundColorSchemeResource(R.color.main);
+        list_view.getSwipeRefreshLayout().setColorSchemeResources(android.R.color.white);
+        list_view.getRecyclerView().setLayoutManager(new LinearLayoutManager(mActivity));
+        list_view.getRecyclerView().setItemAnimator(new DefaultItemAnimator());
+        list_view.setOnLoadListener(new SwipeRecyclerView.OnLoadListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        initData(false);
+                        list_view.complete();
+                        socialAdapter.notifyDataSetChanged();
+                        Toast.makeText(mActivity, "刷新成功", Toast.LENGTH_LONG);
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onLoadMore() {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        initData(true);
+                        if (data.size() > 60) {
+                            list_view.onNoMore("------------------------我是有底线的------------------------");
+                        } else {
+                            list_view.stopLoadingMore();
+                            socialAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }, 1000);
+
+            }
+        });
         socialAdapter = new activityAdapter();
         list_view.setAdapter(socialAdapter);
-        initData();
+        initData(false);
     }
 
-    private void initData() {
-
+    private void initData(boolean bApendData) {
+        if (!bApendData) {
+            data.clear();
+        }
         for (int i = 0; i < 15; i++) {
             ActivityEntity entity = new ActivityEntity();
             entity.setTime("2017-9-18 16:00:00");
@@ -110,12 +154,11 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
 
-//                    Pair<ImageView, String> img = Pair.create(holder.img, "img");
-//                    Pair<LinearLayout, String> title = Pair.create(holder.info_root, "title");
-//                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(mActivity, img,title).toBundle();
-
+                    Pair<View, String> img = Pair.create(holder.root.findViewById(R.id.img), "img");
+                    Pair<View, String> title = Pair.create(holder.root.findViewById(R.id.info_root), "title");
+                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(mActivity, img, title).toBundle();
 //
-                    Bundle bundle= ActivityOptions.makeSceneTransitionAnimation(mActivity,holder.img, "img").toBundle();
+//                    Bundle bundle= ActivityOptions.makeSceneTransitionAnimation(mActivity,holder.img, "img").toBundle();
                     ActivityJump.startDetailActivity(mActivity, bundle, item);
                 }
             });
@@ -134,9 +177,11 @@ public class MainActivity extends BaseActivity {
             ImageView img;
             TextView title;
             TextView time;
+            View root;
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                root = itemView;
                 img = itemView.findViewById(R.id.img);
                 title = itemView.findViewById(R.id.title);
                 time = itemView.findViewById(R.id.time);
