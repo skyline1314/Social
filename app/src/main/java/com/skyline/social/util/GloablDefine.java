@@ -5,7 +5,10 @@ package com.skyline.social.util;
  */
 public class GloablDefine {
 
-    public final static String INTENT_URL_KEY="INTENT_URL_KEY";
-    public final static String INTENT_DATA_KEY="INTENT_DATA_KEY";
+    public final static String INTENT_URL_KEY = "INTENT_URL_KEY";
+    public final static String INTENT_DATA_KEY = "INTENT_DATA_KEY";
 
+
+    //sharepreference
+    public final static String USER_KEY = "USER_KEY";
 }

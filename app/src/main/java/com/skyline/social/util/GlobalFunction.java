@@ -6,17 +6,20 @@ import android.transition.ChangeTransform;
 import android.transition.Transition;
 import android.widget.ImageView;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.skyline.social.R;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/9/18.
  */
 public class GlobalFunction {
 
-    public static void display(Context context, Object url, ImageView view){
+    public static void display(Context context, Object url, ImageView view) {
         Glide.with(context)
                 .load(url)
                 .transition(new DrawableTransitionOptions().crossFade())
@@ -24,10 +27,19 @@ public class GlobalFunction {
                 .into(view);
     }
 
-    public static void ExitActivity(Activity activity){
+    public static void ExitActivity(Activity activity) {
         Transition transition = new ChangeTransform();
         transition.setDuration(2000);
         activity.getWindow().setExitTransition(transition);
+    }
+
+    public static Object parse(String content, Class<?> entity) {
+        try {
+            return JSON.parseObject(content, entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
