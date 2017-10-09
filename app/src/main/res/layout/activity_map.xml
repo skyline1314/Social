@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/root"
     tools:context="com.skyline.social.activity.MapActivity">
 
     <include
-        layout="@layout/title_layout"
+        layout="@layout/title_layout_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

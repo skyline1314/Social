@@ -3,8 +3,10 @@ package com.skyline.social.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,8 +28,12 @@ import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.poi.PoiSortType;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.view.ViewHelper;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.skyline.social.R;
 import com.skyline.social.base.BaseActivity;
+import com.skyline.social.util.DisplayUtils;
 
 import java.util.ArrayList;
 
@@ -35,11 +41,18 @@ public class MapActivity extends BaseActivity implements OnGetPoiSearchResultLis
 
     private RelativeLayout back_btn;
     private TextView title_text;
+    private RelativeLayout search_btn;
     private MapView map_view;
     private RecyclerView nearby_list;
+    private LinearLayout root;
     private ArrayList<PoiInfo> data = new ArrayList<>();
     private nearbyAdapter adapter;
+    private static final int TITLE_HEIGHT = DisplayUtils.dp2px(45);
 
+    // 定位相关
+    LocationClient mLocationClient;
+    public MyLocationListenner myListener = new MyLocationListenner();
+    private PoiSearch mPoiSearch;
     private int mCurrentDirection = 0;
     private double mCurrentLat = 0.0;
     private double mCurrentLon = 0.0;
@@ -47,12 +60,8 @@ public class MapActivity extends BaseActivity implements OnGetPoiSearchResultLis
     boolean isFirstLoc = true; // 是否首次定位
     private MyLocationData locData;
     private BaiduMap mBaiduMap;
+    private boolean mSearchViewShow;
 
-
-    // 定位相关
-    LocationClient mLocationClient;
-    public MyLocationListenner myListener = new MyLocationListenner();
-    private PoiSearch mPoiSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +82,7 @@ public class MapActivity extends BaseActivity implements OnGetPoiSearchResultLis
 
     private void initView() {
         back_btn = (RelativeLayout) findViewById(R.id.back_btn);
+        root = (LinearLayout) findViewById(R.id.root);
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +109,13 @@ public class MapActivity extends BaseActivity implements OnGetPoiSearchResultLis
         option.setScanSpan(10);
         mLocationClient.setLocOption(option);
         mLocationClient.start();
+        search_btn = (RelativeLayout) findViewById(R.id.search_btn);
+        search_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SearchViewAnimation();
+            }
+        });
     }
 
     @Override
@@ -199,7 +216,7 @@ public class MapActivity extends BaseActivity implements OnGetPoiSearchResultLis
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    searchNeayBy();
+                    searchNeayBy("小区");
                 }
             }).start();
 
@@ -214,9 +231,9 @@ public class MapActivity extends BaseActivity implements OnGetPoiSearchResultLis
      * 搜索周边地理位置
      * by hankkin at:2015-11-01 22:54:49
      */
-    private void searchNeayBy() {
+    private void searchNeayBy(String key) {
         PoiNearbySearchOption option = new PoiNearbySearchOption();
-        option.keyword("写字楼");
+        option.keyword(key);
         option.sortType(PoiSortType.distance_from_near_to_far);
         option.location(new LatLng(mCurrentLat, mCurrentLon));
 
@@ -240,4 +257,47 @@ public class MapActivity extends BaseActivity implements OnGetPoiSearchResultLis
     }
 
 
+    private void SearchViewAnimation() {
+        ViewPropertyAnimator.animate(root).translationY(mSearchViewShow ? 0 : -TITLE_HEIGHT).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                ViewGroup.LayoutParams params = root.getLayoutParams();
+                if (!mSearchViewShow) {
+                    params.height = DisplayUtils.getScreenHeightPixels(mActivity) - DisplayUtils.getStatusHeight(mActivity) + TITLE_HEIGHT;
+                } else {
+                    params.height = DisplayUtils.getScreenHeightPixels(mActivity) - DisplayUtils.getStatusHeight(mActivity);
+                }
+                root.setLayoutParams(params);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mSearchViewShow = !mSearchViewShow;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        }).setDuration(300);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        if (mSearchViewShow) {
+            search_btn.performClick();
+            return;
+        }
+        super.finish();
+    }
 }
